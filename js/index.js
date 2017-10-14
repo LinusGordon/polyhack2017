@@ -98,7 +98,6 @@ window.onload = function() {
 		var peach;
 		var bad_apple;
 		var text;
-		var text2;
 		var needs_setup;
 
 		function create() {
@@ -132,12 +131,7 @@ window.onload = function() {
 
 			button = game.add.button(game.world.centerX - 60, game.height / 2 + 150, 'start', actionOnClick, this, 2, 1, 0);
 			button.scale.setTo(.1, .1);
-			text = game.add.text(game.world.centerX + 20, game.world.height / 2 - 200, 'Game over.', { font: "25px Arial", align: "center" });
     		text.anchor.setTo(0.5, 0.5);
-    		text2 = game.add.text(game.world.centerX + 20, game.world.height / 2 - 150 , 'Press start to play again.', { font: "25px Arial", align: "center" });
-    		text2.anchor.setTo(0.5, 0.5);
-    		text.visible = false
-    		text2.visible = false
     		needs_setup = true;
 
 
@@ -149,6 +143,9 @@ window.onload = function() {
 		function startText() {
 			setup_text = game.add.text(game.world.centerX - 275, game.world.height / 2 - 30 , 'Before you press start, please follow the instructions below: \n \t 1) Look at the "Move Left" button while clicking it \n \t 2) Look at the "Move Right" button while clicking it \n \t 3) Repeat steps 1 and 2 a few times \n \t 4) Press start to begin', { font: "20px Gloria Hallelujah", fill: "#ffff99", align: "left" });
     		setup_text.font = "Gloria Hallelujah"
+    		text = game.add.text(game.world.centerX - 350, game.world.height / 2 - 30, 'Game over. \n Press start to play again.', { font: "50px Gloria Hallelujah", fill: "#ffff99", align: "center" });
+    		text.font = "Gloria Hallelujah"
+    		text.visible = false
 		}
 
 		function actionOnClick() {
@@ -160,7 +157,6 @@ window.onload = function() {
 			level = 1;
 			time = 0;
 			text.kill()
-			text2.kill()
 			setup_text.kill()
 			banner.kill()
 
@@ -171,8 +167,6 @@ window.onload = function() {
 			game.debug.text('Your score: ' + score, 10, 20);
 			if(game_over == true) {
 				text.visible = true
-				text2.visible = true
-				//text2 = game.debug.text('Press Start to play again.' + score, game.world.centerX - 125, game.world.height / 2 - 150);
 				button.revive()
 		    } 
 
