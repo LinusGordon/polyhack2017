@@ -45,7 +45,22 @@ window.onload = function() {
             if (cl.getCurrentPosition()) {
                 cl.draw(overlay);
             }
+
+
+
+
             document.getElementById("testButton").onclick = function(event) { 
+            	var prediction = webgazer.getCurrentPrediction();
+				if (prediction) {
+				    var x = prediction.x;
+				    var y = prediction.y;
+				    console.log("X is " + x)
+				    console.log("Y is " + y)
+				}
+
+
+            }
+            document.getElementById("testButton2").onclick = function(event) { 
             	var prediction = webgazer.getCurrentPrediction();
 				if (prediction) {
 				    var x = prediction.x;
@@ -60,6 +75,51 @@ window.onload = function() {
         }
         drawLoop();
 
+        var game = new Phaser.Game(800, 600, Phaser.AUTO, '', { preload: preload, create: create, update: update });
+
+		function preload() {
+		}
+
+		function create(){
+			 // now the rocks
+			 rocks = game.add.group();
+		     rocks.enableBody = true;
+		}
+		function update(){
+			 
+			game.physics.arcade.collide(player, platforms);
+		    game.physics.arcade.collide(rocks, platforms);
+			game.physics.arcade.collide(player, rocks);
+		    game.physics.arcade.collide(rocks, rocks);
+			
+			j++;
+		    if (j === update_interval)
+		    {	fallingrocks(1);
+		        update_interval = Math.floor(Math.random() * 20) * 60; // 0 - 20sec @ 60fps
+		        j = 0;
+		}
+		function fallingrocks(i){
+		     
+			 if (i==1){
+			  rock = rocks.create(Math.floor(Math.random() * 45), 0, 'rock1');
+		     rock.body.gravity.y = 200;
+			 rock.body.bounce.y = 0.4;} else if (i==2)
+				 {	  rock = rocks.create(Math.floor(Math.random() * 45), 0, 'rock2');
+					rock.body.gravity.y = 150;
+					rock.body.bounce.y = 0.3;} else if (i==3)
+						{	 rock = rocks.create(Math.floor(Math.random() * 45), 0, 'rock3');
+							rock.body.gravity.y = 100;
+							rock.body.bounce.y = 0.2;}else 
+							{	  rock = rocks.create(Math.floor(Math.random() * 45), 0, 'rock4');
+								rock.body.gravity.y = 50;
+								rock.body.bounce.y = 0.1;
+							}
+							rock.body.immovable = true;
+							rock.body.collideWorldBounds = true;
+							
+		}
+		
+
     };
 
     function checkIfReady() {
@@ -71,6 +131,8 @@ window.onload = function() {
     }
     setTimeout(checkIfReady,100);
 };
+
+
 
 
 window.onbeforeunload = function() {
