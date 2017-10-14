@@ -75,48 +75,99 @@ window.onload = function() {
         }
         drawLoop();
 
-        var game = new Phaser.Game(800, 600, Phaser.AUTO, '', { preload: preload, create: create, update: update });
+		var game = new Phaser.Game(800, 600, Phaser.AUTO, 'phaser-example', { preload: preload, create: create, update: update, render: render });
 
 		function preload() {
+
+		    game.load.image('background', 'assets/background.jpg');
+		    game.load.image('jarad', 'assets/jarad.png');
+			game.load.image('nouri', 'assets/nouri.png');
+			game.load.image('jack', 'assets/jack.png');
+			game.load.image('ben', 'assets/ben.png');
+			game.load.image('donsky', 'assets/donsky.png')
+			game.load.image('ground', 'assets/square.png')
 		}
 
-		function create(){
-			 // now the rocks
-			 rocks = game.add.group();
-		     rocks.enableBody = true;
+		var jarad;
+		var ben;
+		var nouri;
+		var jack;
+		var time;
+
+		function create() {
+
+		    game.stage.backgroundColor = '#2d2d2d';
+
+		    game.physics.startSystem(Phaser.Physics.ARCADE);
+
+		    //  Set the world (global) gravity
+		    game.physics.arcade.gravity.y = 100;
+
+		    //  Sprite 1 will use the World (global) gravity
+		    // jarad = game.add.sprite(10, 10, 'jarad');
+		    // jarad.scale.setTo(0.1, 0.1);
+
+		    // //  Sprite 2 is set to ignore the global gravity and use its own value
+		    // ben = game.add.sprite(10, 10, 'ben');
+		    // ben.scale.setTo(0.1, 0.1);
+		    // //  Sprite 3 will use both the world gravity and its own gravityScale modifier
+		    // nouri = game.add.sprite(10, 10, 'nouri');
+		    // nouri.scale.setTo(0.1, 0.1);
+		    // //  Sprite 4 will ignore all gravity
+		    // jack = game.add.sprite(10, 10, 'jack');
+		    // jack.scale.setTo(0.1, 0.1);
+		    // // Enable physics on those sprites
+		    // game.physics.enable( [ jarad, ben, nouri, jack ], Phaser.Physics.ARCADE);
+
+		    // jarad.body.collideWorldBounds = false;
+		    // jarad.body.bounce.y = 0.8;
+		    
+		    // ben.body.collideWorldBounds = false;
+		    // ben.body.bounce.y = 0.8;
+		    // ben.body.gravity.y = 200;
+		    
+		    // nouri.body.collideWorldBounds = false;
+		    // nouri.body.bounce.y = 0.8;
+		    // nouri.body.gravity.y = 50;
+
+		    // jack.body.gravity.y = 200;
+		    time = 0;
+		    level = 1;
 		}
-		function update(){
-			 
-			game.physics.arcade.collide(player, platforms);
-		    game.physics.arcade.collide(rocks, platforms);
-			game.physics.arcade.collide(player, rocks);
-		    game.physics.arcade.collide(rocks, rocks);
-			
-			j++;
-		    if (j === update_interval)
-		    {	fallingrocks(1);
-		        update_interval = Math.floor(Math.random() * 20) * 60; // 0 - 20sec @ 60fps
-		        j = 0;
+
+		function render() {
+
+		    // game.debug.text('world gravity', jarad.x - 32, 64);
+		    // game.debug.text('local gravity', ben.x - 32, 64);
+		    // game.debug.text('local / 2', nouri.x - 32, 64);
+		    // game.debug.text('no gravity', jack.x - 32, 64);
+
 		}
-		function fallingrocks(i){
-		     
-			 if (i==1){
-			  rock = rocks.create(Math.floor(Math.random() * 45), 0, 'rock1');
-		     rock.body.gravity.y = 200;
-			 rock.body.bounce.y = 0.4;} else if (i==2)
-				 {	  rock = rocks.create(Math.floor(Math.random() * 45), 0, 'rock2');
-					rock.body.gravity.y = 150;
-					rock.body.bounce.y = 0.3;} else if (i==3)
-						{	 rock = rocks.create(Math.floor(Math.random() * 45), 0, 'rock3');
-							rock.body.gravity.y = 100;
-							rock.body.bounce.y = 0.2;}else 
-							{	  rock = rocks.create(Math.floor(Math.random() * 45), 0, 'rock4');
-								rock.body.gravity.y = 50;
-								rock.body.bounce.y = 0.1;
-							}
-							rock.body.immovable = true;
-							rock.body.collideWorldBounds = true;
-							
+
+		function update() {
+			x_value = game.world.centerX + Math.random() * (350 + 350) - 350;
+			if(time % Math.round(150000 / level) == 0) {
+			    jarad = game.add.sprite(x_value, -100, 'jarad');
+			    jarad.scale.setTo(0.1, 0.1);
+			}
+			if(time % Math.round(400000 / level) == 0) {
+			    jack = game.add.sprite(x_value, -100, 'jack');
+			    jack.scale.setTo(0.1, 0.1);
+			}
+			if(time % Math.round(600000 / level) == 0) {
+			    ben = game.add.sprite(x_value, -100, 'ben');
+			    ben.scale.setTo(0.1, 0.1);
+			}
+			if(time % Math.round(1200000 / level) == 0) {
+			    nouri = game.add.sprite(x_value, -100, 'nouri');
+			    nouri.scale.setTo(0.1, 0.1);
+			}			
+			game.physics.enable( [ jarad, ben, nouri, jack ], Phaser.Physics.ARCADE);
+			time++;
+
+			if (time % 200) {
+				level += 3
+			}
 		}
 		
 
