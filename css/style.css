@@ -1,0 +1,26 @@
+.container {
+    display: table; /* Make the container element behave like a table */
+    width: 100%; /* Set full-width to expand the whole page */
+}
+.container > div {
+  display: inline-block;
+  line-height: 30px;
+  padding: 30px;
+  background: #000;
+  color: #fff;
+  height: 400px;
+  display: table-cell; /* Make elements inside the container behave like table cells */
+  text-indent: 30px;
+  font-size: 20px;
+}
+.container:after {
+  content: " ";
+  display: inline-block;
+  width: 100%;
+}
+
+h1 {
+	margin: auto;
+    width: 50%;
+    text-align: center;
+}

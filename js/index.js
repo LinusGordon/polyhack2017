@@ -22,6 +22,7 @@ window.onload = function() {
         video.width = width;
         video.height = height;
         video.style.margin = '0px';
+        video.style.visibility = 'hidden' // Hide the video screen
 
         webgazer.params.imgWidth = width;
         webgazer.params.imgHeight = height;
@@ -34,6 +35,7 @@ window.onload = function() {
         overlay.style.top = topDist;
         overlay.style.left = leftDist;
         overlay.style.margin = '0px';
+        overlay.style.visibility = 'hidden' // Hide the video screen
 
         document.body.appendChild(overlay);
 
@@ -44,33 +46,7 @@ window.onload = function() {
             overlay.getContext('2d').clearRect(0,0,width,height);
             if (cl.getCurrentPosition()) {
                 cl.draw(overlay);
-            }
-
-
-
-
-            document.getElementById("testButton").onclick = function(event) { 
-            	var prediction = webgazer.getCurrentPrediction();
-				if (prediction) {
-				    var x = prediction.x;
-				    var y = prediction.y;
-				    console.log("X is " + x)
-				    console.log("Y is " + y)
-				}
-
-
-            }
-            document.getElementById("testButton2").onclick = function(event) { 
-            	var prediction = webgazer.getCurrentPrediction();
-				if (prediction) {
-				    var x = prediction.x;
-				    var y = prediction.y;
-				    console.log("X is " + x)
-				    console.log("Y is " + y)
-				}
-
-
-            }
+           }
 
         }
         drawLoop();
@@ -90,6 +66,8 @@ window.onload = function() {
 			game.load.image('apple', 'assets/apple.png')
 			game.load.image('peach', 'assets/peach.gif')
 			game.load.image('bad_apple', 'assets/bad_apple.png')
+			game.load.image('start','assets/start.png');
+
 
 		}
 
@@ -110,6 +88,7 @@ window.onload = function() {
 			this.game.scale.pageAlignVertically = true;
 			this.game.scale.refresh();
 
+
 		    game.physics.startSystem(Phaser.Physics.ARCADE);
 
 		    //  Set the world (global) gravity
@@ -119,7 +98,7 @@ window.onload = function() {
 
 		    time = 0;
 		    level = 1;
-		    donsky = game.add.sprite(game.world.centerX, game.world.height - 20, 'donsky');
+		    donsky = game.add.sprite(game.world.centerX - 40, game.world.height - 20, 'donsky');
 			donsky.scale.setTo(0.2, 0.2);
 			game.physics.enable(donsky, Phaser.Physics.ARCADE);
 			donsky.body.allowGravity = false
@@ -129,8 +108,19 @@ window.onload = function() {
 			apples = game.add.group();
 			bad_apples = game.add.group();
 			score = 0;
+			paused = true;
+
+			button = game.add.button(game.world.centerX - 140, game.height / 2 - 55, 'start', actionOnClick, this, 2, 1, 0);
+			button.scale.setTo(.25, .25);
 
 
+
+
+		}
+
+		function actionOnClick() {
+			paused = false;
+			button.destroy();
 		}
 
 		function render() {
@@ -145,73 +135,75 @@ window.onload = function() {
 		}
 
 		function update() {
-			x_value = game.world.centerX + Math.random() * (350 + 350) - 350;
-			if(!game_over) {
-				if(time % Math.round(100 ) == 0) {
-				    apple = game.add.sprite(x_value, -100, 'apple');
-				    apple.scale.setTo(.1, .1);
-				    game.physics.enable(apple, Phaser.Physics.ARCADE)
-				    apple.enableBody = true;
-	    			apple.physicsBodyType = Phaser.Physics.ARCADE;
-					apple.body.checkCollision.down = true
-					apples.add(apple)
-					game.physics.arcade.collide(apple, donsky);
-					game.physics.arcade.overlap(apple, donsky, collisionGoodHandler, null, this);
+			if(!paused) {
+				x_value = game.world.centerX + Math.random() * (350 + 350) - 350;
+				if(!game_over) {
+					if(time % Math.round(100 ) == 0) {
+					    apple = game.add.sprite(x_value, -100, 'apple');
+					    apple.scale.setTo(.1, .1);
+					    game.physics.enable(apple, Phaser.Physics.ARCADE)
+					    apple.enableBody = true;
+		    			apple.physicsBodyType = Phaser.Physics.ARCADE;
+						apple.body.checkCollision.down = true
+						apples.add(apple)
+						game.physics.arcade.collide(apple, donsky);
+						game.physics.arcade.overlap(apple, donsky, collisionGoodHandler, null, this);
 
-				} else if (time % Math.round(250) == 0) {
-					apple = game.add.sprite(x_value, -100, 'peach');
-				    apple.scale.setTo(.2, .2);
-				    game.physics.enable(apple, Phaser.Physics.ARCADE)
-				    apple.enableBody = true;
-	    			apple.physicsBodyType = Phaser.Physics.ARCADE;
-					apple.body.checkCollision.down = true
-					apples.add(apple)
-					game.physics.arcade.collide(apple, donsky);
-					game.physics.arcade.overlap(apple, donsky, collisionGoodHandler, null, this);
-				} else if (time % Math.round(150) == 0) {
-					bad_apple = game.add.sprite(x_value, -100, 'bad_apple');
-				    bad_apple.scale.setTo(.1, .1);
-				    game.physics.enable(bad_apple, Phaser.Physics.ARCADE)
-				    bad_apple.enableBody = true;
-	    			bad_apple.physicsBodyType = Phaser.Physics.ARCADE;
-					bad_apple.body.checkCollision.down = true
-					bad_apple.body.velocity.y = -4
-					bad_apples.add(bad_apple)
-					game.physics.arcade.collide(bad_apple, donsky);
-					game.physics.arcade.overlap(bad_apple, donsky, collisionGoodHandler, null, this);
+					} else if (time % Math.round(250) == 0) {
+						apple = game.add.sprite(x_value, -100, 'peach');
+					    apple.scale.setTo(.2, .2);
+					    game.physics.enable(apple, Phaser.Physics.ARCADE)
+					    apple.enableBody = true;
+		    			apple.physicsBodyType = Phaser.Physics.ARCADE;
+						apple.body.checkCollision.down = true
+						apples.add(apple)
+						game.physics.arcade.collide(apple, donsky);
+						game.physics.arcade.overlap(apple, donsky, collisionGoodHandler, null, this);
+					} else if (time % Math.round(150) == 0) {
+						bad_apple = game.add.sprite(x_value, -100, 'bad_apple');
+					    bad_apple.scale.setTo(.1, .1);
+					    game.physics.enable(bad_apple, Phaser.Physics.ARCADE)
+					    bad_apple.enableBody = true;
+		    			bad_apple.physicsBodyType = Phaser.Physics.ARCADE;
+						bad_apple.body.checkCollision.down = true
+						bad_apple.body.velocity.y = -4
+						bad_apples.add(bad_apple)
+						game.physics.arcade.collide(bad_apple, donsky);
+						game.physics.arcade.overlap(bad_apple, donsky, collisionGoodHandler, null, this);
+					}
+					game.physics.arcade.overlap(apples, donsky, collisionGoodHandler, null, this);
+					game.physics.arcade.overlap(bad_apples, donsky, collisionBadHandler, null, this);
 				}
-				game.physics.arcade.overlap(apples, donsky, collisionGoodHandler, null, this);
-				game.physics.arcade.overlap(bad_apples, donsky, collisionBadHandler, null, this);
-			}
-			if (!game_over) {
-				time++;
-			} else {
-				console.log("hey")
-			}
-			if (time % 200) {
-				level += 3
-			}
+				if (!game_over) {
+					time++;
+				} else {
+					console.log("hey")
+				}
+				if (time % 200) {
+					level += 3
+				}
 
-			 if (game.input.keyboard.isDown(Phaser.Keyboard.LEFT)) {
-			 	donsky.body.velocity.x = -300;
-			 }
-			 else if (game.input.keyboard.isDown(Phaser.Keyboard.RIGHT)) {
-			 	donsky.body.velocity.x = 300;
-			 } else {
-			 	donsky.body.velocity.x = 0;
-			 }
-			 // var prediction = webgazer.getCurrentPrediction();
-			 // if (prediction) {
-				//     var x = prediction.x;
-				//     var y = prediction.y;
-				//     if(x < 400) {
-				//     	donsky.body.velocity.x = -300
-				//     } else if (x > 800) {
-				//     	donsky.body.velocity.x = 300
-				//     } else {
-				//     	donsky.body.velocity.x = 0
-				//     }
-				// }
+				 if (game.input.keyboard.isDown(Phaser.Keyboard.LEFT)) {
+				 	donsky.body.velocity.x = -300;
+				 }
+				 else if (game.input.keyboard.isDown(Phaser.Keyboard.RIGHT)) {
+				 	donsky.body.velocity.x = 300;
+				 } else {
+				 	donsky.body.velocity.x = 0;
+				 }
+				 // var prediction = webgazer.getCurrentPrediction();
+				 // if (prediction) {
+					//     var x = prediction.x;
+					//     var y = prediction.y;
+					//     if(x < 400) {
+					//     	donsky.body.velocity.x = -300
+					//     } else if (x > 800) {
+					//     	donsky.body.velocity.x = 300
+					//     } else {
+					//     	donsky.body.velocity.x = 0
+					//     }
+					// }
+				}
 		}
 		function collisionGoodHandler(obj, donsky) {
 			if(!game_over){
