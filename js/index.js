@@ -82,6 +82,8 @@ window.onload = function() {
 		var score;
 		var peach;
 		var bad_apple;
+		var text;
+		var text2;
 
 		function create() {
 			this.game.scale.pageAlignHorizontally = true;
@@ -112,6 +114,12 @@ window.onload = function() {
 
 			button = game.add.button(game.world.centerX - 140, game.height / 2 - 55, 'start', actionOnClick, this, 2, 1, 0);
 			button.scale.setTo(.25, .25);
+			text = game.add.text(game.world.centerX + 20, game.world.height / 2 - 200, 'Game over.', { font: "25px Arial", align: "center" });
+    		text.anchor.setTo(0.5, 0.5);
+    		text2 = game.add.text(game.world.centerX + 20, game.world.height / 2 - 150 , 'Press start to play again.', { font: "25px Arial", align: "center" });
+    		text2.anchor.setTo(0.5, 0.5);
+    		text.visible = false
+    		text2.visible = false
 
 
 
@@ -119,18 +127,26 @@ window.onload = function() {
 		}
 
 		function actionOnClick() {
+			console.log("heyyyy")
 			paused = false;
-			button.destroy();
+			button.kill();
+			game_over = false;
+			score = 0;
+			level = 1;
+			time = 0;
+			text.kill()
+			text2.kill()
+
 		}
 
 		function render() {
-
+			game.debug.text('Your score: ' + score, 10, 20);
 			if(game_over == true) {
-				game.debug.text('Game over. Your score is: ' + score, game.world.centerX - 125, game.world.height / 2);
-		    }
-		    // game.debug.text('local gravity', ben.x - 32, 64);
-		    // game.debug.text('local / 2', nouri.x - 32, 64);
-		    // game.debug.text('no gravity', jack.x - 32, 64);
+				text.visible = true
+				text2.visible = true
+				//text2 = game.debug.text('Press Start to play again.' + score, game.world.centerX - 125, game.world.height / 2 - 150);
+				button.revive()
+		    } 
 
 		}
 
@@ -176,8 +192,6 @@ window.onload = function() {
 				}
 				if (!game_over) {
 					time++;
-				} else {
-					console.log("hey")
 				}
 				if (time % 200) {
 					level += 3
