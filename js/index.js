@@ -224,26 +224,26 @@ window.onload = function() {
 					level++;
 				}
 
-				 if (game.input.keyboard.isDown(Phaser.Keyboard.LEFT)) {
-				 	donsky.body.velocity.x = -300;
-				 }
-				 else if (game.input.keyboard.isDown(Phaser.Keyboard.RIGHT)) {
-				 	donsky.body.velocity.x = 300;
-				 } else {
-				 	donsky.body.velocity.x = 0;
-				 }
-				 // var prediction = webgazer.getCurrentPrediction();
-				 // if (prediction) {
-					//     var x = prediction.x;
-					//     var y = prediction.y;
-					//     if(x < 400) {
-					//     	donsky.body.velocity.x = -300
-					//     } else if (x > 800) {
-					//     	donsky.body.velocity.x = 300
-					//     } else {
-					//     	donsky.body.velocity.x = 0
-					//     }
-					// }
+				 // if (game.input.keyboard.isDown(Phaser.Keyboard.LEFT)) {
+				 // 	donsky.body.velocity.x = -300;
+				 // }
+				 // else if (game.input.keyboard.isDown(Phaser.Keyboard.RIGHT)) {
+				 // 	donsky.body.velocity.x = 300;
+				 // } else {
+				 // 	donsky.body.velocity.x = 0;
+				 // }
+				 var prediction = webgazer.getCurrentPrediction();
+				 if (prediction) {
+					    var x = prediction.x;
+					    var y = prediction.y;
+					    if(x < 400) {
+					    	donsky.body.velocity.x = -300
+					    } else if (x > 800) {
+					    	donsky.body.velocity.x = 300
+					    } else {
+					    	donsky.body.velocity.x = 0
+					    }
+					}
 				}
 		}
 		function collisionGoodHandler(obj, donsky) {
