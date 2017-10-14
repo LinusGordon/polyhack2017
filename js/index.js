@@ -10,7 +10,7 @@ window.onload = function() {
 
     var width = 320;
     var height = 240;
-    var topDist = '300px';
+    var topDist = '0';
     var leftDist = '650px';
     
     var setup = function() {
@@ -94,8 +94,11 @@ window.onload = function() {
 		var nouri;
 		var jack;
 		var time;
+		var donsky;
+		var game_over;
 
 		function create() {
+this.game.scale.pageAlignHorizontally = true;this.game.scale.pageAlignVertically = true;this.game.scale.refresh();
 
 		    game.stage.backgroundColor = '#2d2d2d';
 
@@ -106,41 +109,21 @@ window.onload = function() {
 
 		    background = game.add.tileSprite(0,0,800,600,'background')
 
-		    //  Sprite 1 will use the World (global) gravity
-		    // jarad = game.add.sprite(10, 10, 'jarad');
-		    // jarad.scale.setTo(0.1, 0.1);
-
-		    // //  Sprite 2 is set to ignore the global gravity and use its own value
-		    // ben = game.add.sprite(10, 10, 'ben');
-		    // ben.scale.setTo(0.1, 0.1);
-		    // //  Sprite 3 will use both the world gravity and its own gravityScale modifier
-		    // nouri = game.add.sprite(10, 10, 'nouri');
-		    // nouri.scale.setTo(0.1, 0.1);
-		    // //  Sprite 4 will ignore all gravity
-		    // jack = game.add.sprite(10, 10, 'jack');
-		    // jack.scale.setTo(0.1, 0.1);
-		    // // Enable physics on those sprites
-		    // game.physics.enable( [ jarad, ben, nouri, jack ], Phaser.Physics.ARCADE);
-
-		    // jarad.body.collideWorldBounds = false;
-		    // jarad.body.bounce.y = 0.8;
-		    
-		    // ben.body.collideWorldBounds = false;
-		    // ben.body.bounce.y = 0.8;
-		    // ben.body.gravity.y = 200;
-		    
-		    // nouri.body.collideWorldBounds = false;
-		    // nouri.body.bounce.y = 0.8;
-		    // nouri.body.gravity.y = 50;
-
-		    // jack.body.gravity.y = 200;
 		    time = 0;
 		    level = 1;
+		    donsky = game.add.sprite(game.world.centerX, game.world.height - 200, 'donsky');
+			donsky.scale.setTo(0.2, 0.2);
+			game.physics.enable(donsky, Phaser.Physics.ARCADE);
+			donsky.body.allowGravity = false
+			game_over = false;
+
 		}
 
 		function render() {
 
-		    // game.debug.text('world gravity', jarad.x - 32, 64);
+			if(game_over == true) {
+				game.debug.text('Game over. Your score is: ' + time, game.world.centerX, game.world.height / 2);
+		    }
 		    // game.debug.text('local gravity', ben.x - 32, 64);
 		    // game.debug.text('local / 2', nouri.x - 32, 64);
 		    // game.debug.text('no gravity', jack.x - 32, 64);
@@ -152,25 +135,63 @@ window.onload = function() {
 			if(time % Math.round(150000 / level) == 0) {
 			    jarad = game.add.sprite(x_value, -100, 'jarad');
 			    jarad.scale.setTo(0.1, 0.1);
+			    jarad.enableBody = true;
+    			jarad.physicsBodyType = Phaser.Physics.ARCADE;
 			}
 			if(time % Math.round(400000 / level) == 0) {
 			    jack = game.add.sprite(x_value, -100, 'jack');
 			    jack.scale.setTo(0.1, 0.1);
+			    jack.enableBody = true;
+    			jack.physicsBodyType = Phaser.Physics.ARCADE;
 			}
 			if(time % Math.round(600000 / level) == 0) {
 			    ben = game.add.sprite(x_value, -100, 'ben');
 			    ben.scale.setTo(0.1, 0.1);
+			    ben.enableBody = true;
+    			ben.physicsBodyType = Phaser.Physics.ARCADE;
 			}
 			if(time % Math.round(1200000 / level) == 0) {
 			    nouri = game.add.sprite(x_value, -100, 'nouri');
 			    nouri.scale.setTo(0.1, 0.1);
+			    nouri.enableBody = true;
+    			nouri.physicsBodyType = Phaser.Physics.ARCADE;
 			}			
 			game.physics.enable( [ jarad, ben, nouri, jack ], Phaser.Physics.ARCADE);
-			time++;
+			game.physics.arcade.overlap(jarad, donsky, collisionHandler, null, this);
+			game.physics.arcade.overlap(nouri, donsky, collisionHandler, null, this);
+			game.physics.arcade.overlap(ben, donsky, collisionHandler, null, this);
+			game.physics.arcade.overlap(jack, donsky, collisionHandler, null, this);
 
+			if (!game_over) {
+				time++;
+			}
 			if (time % 200) {
 				level += 3
 			}
+
+			 // if (game.input.keyboard.isDown(Phaser.Keyboard.LEFT)) {
+			 // 	donsky.body.velocity.x = -300;
+			 // }
+			 // else if (game.input.keyboard.isDown(Phaser.Keyboard.RIGHT)) {
+			 // 	donsky.body.velocity.x = 300;
+			 // } else {
+			 // 	donsky.body.velocity.x = 0;
+			 // }
+			 var prediction = webgazer.getCurrentPrediction();
+			 if (prediction) {
+				    var x = prediction.x;
+				    var y = prediction.y;
+				    if(x < 400) {
+				    	donsky.body.velocity.x = -300
+				    } else if (x > 800) {
+				    	donsky.body.velocity.x = 300
+				    } else {
+				    	donsky.body.velocity.x = 0
+				    }
+				}
+		}
+		function collisionHandler(obj, donsky) {
+			game_over = true
 		}
 		
 
