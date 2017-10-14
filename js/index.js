@@ -84,6 +84,7 @@ window.onload = function() {
 		var bad_apple;
 		var text;
 		var text2;
+		var needs_setup;
 
 		function create() {
 			this.game.scale.pageAlignHorizontally = true;
@@ -112,7 +113,7 @@ window.onload = function() {
 			score = 0;
 			paused = true;
 
-			button = game.add.button(game.world.centerX - 140, game.height / 2 - 55, 'start', actionOnClick, this, 2, 1, 0);
+			button = game.add.button(game.world.centerX - 140, game.height / 2 + 100, 'start', actionOnClick, this, 2, 1, 0);
 			button.scale.setTo(.25, .25);
 			text = game.add.text(game.world.centerX + 20, game.world.height / 2 - 200, 'Game over.', { font: "25px Arial", align: "center" });
     		text.anchor.setTo(0.5, 0.5);
@@ -120,6 +121,9 @@ window.onload = function() {
     		text2.anchor.setTo(0.5, 0.5);
     		text.visible = false
     		text2.visible = false
+    		needs_setup = true;
+    		setup_text = game.add.text(game.world.centerX - 300, game.world.height / 2 - 75 , 'Before you press start, please follow the instructions below: \n \t 1) Look at the "Move Left" button while clicking it \n \t 2) Look at the "Move Right" button while clicking it \n \t 3) Repeat steps 1 and 2 a few times \n \t 4) Press start to begin', { font: "25px Arial", fill: "#ffff99", align: "left" });
+
 
 
 
@@ -136,6 +140,8 @@ window.onload = function() {
 			time = 0;
 			text.kill()
 			text2.kill()
+			setup_text.kill()
+
 
 		}
 
