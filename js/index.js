@@ -136,7 +136,7 @@ window.onload = function() {
 		function render() {
 
 			if(game_over == true) {
-				game.debug.text('Game over. Your score is: ' + time, game.world.centerX, game.world.height / 2);
+				game.debug.text('Game over. Your score is: ' + score, game.world.centerX - 125, game.world.height / 2);
 		    }
 		    // game.debug.text('local gravity', ben.x - 32, 64);
 		    // game.debug.text('local / 2', nouri.x - 32, 64);
@@ -146,44 +146,47 @@ window.onload = function() {
 
 		function update() {
 			x_value = game.world.centerX + Math.random() * (350 + 350) - 350;
-			if(time % Math.round(100 ) == 0) {
-			    apple = game.add.sprite(x_value, -100, 'apple');
-			    apple.scale.setTo(.1, .1);
-			    game.physics.enable(apple, Phaser.Physics.ARCADE)
-			    apple.enableBody = true;
-    			apple.physicsBodyType = Phaser.Physics.ARCADE;
-				apple.body.checkCollision.down = true
-				apples.add(apple)
-				game.physics.arcade.collide(apple, donsky);
-				game.physics.arcade.overlap(apple, donsky, collisionGoodHandler, null, this);
+			if(!game_over) {
+				if(time % Math.round(100 ) == 0) {
+				    apple = game.add.sprite(x_value, -100, 'apple');
+				    apple.scale.setTo(.1, .1);
+				    game.physics.enable(apple, Phaser.Physics.ARCADE)
+				    apple.enableBody = true;
+	    			apple.physicsBodyType = Phaser.Physics.ARCADE;
+					apple.body.checkCollision.down = true
+					apples.add(apple)
+					game.physics.arcade.collide(apple, donsky);
+					game.physics.arcade.overlap(apple, donsky, collisionGoodHandler, null, this);
 
-			} else if (time % Math.round(250) == 0) {
-				apple = game.add.sprite(x_value, -100, 'peach');
-			    apple.scale.setTo(.2, .2);
-			    game.physics.enable(apple, Phaser.Physics.ARCADE)
-			    apple.enableBody = true;
-    			apple.physicsBodyType = Phaser.Physics.ARCADE;
-				apple.body.checkCollision.down = true
-				apples.add(apple)
-				game.physics.arcade.collide(apple, donsky);
-				game.physics.arcade.overlap(apple, donsky, collisionGoodHandler, null, this);
-			} else if (time % Math.round(150) == 0) {
-				bad_apple = game.add.sprite(x_value, -100, 'bad_apple');
-			    bad_apple.scale.setTo(.1, .1);
-			    game.physics.enable(bad_apple, Phaser.Physics.ARCADE)
-			    bad_apple.enableBody = true;
-    			bad_apple.physicsBodyType = Phaser.Physics.ARCADE;
-				bad_apple.body.checkCollision.down = true
-				bad_apple.body.velocity.y = -4
-				bad_apples.add(bad_apple)
-				game.physics.arcade.collide(bad_apple, donsky);
-				game.physics.arcade.overlap(bad_apple, donsky, collisionGoodHandler, null, this);
+				} else if (time % Math.round(250) == 0) {
+					apple = game.add.sprite(x_value, -100, 'peach');
+				    apple.scale.setTo(.2, .2);
+				    game.physics.enable(apple, Phaser.Physics.ARCADE)
+				    apple.enableBody = true;
+	    			apple.physicsBodyType = Phaser.Physics.ARCADE;
+					apple.body.checkCollision.down = true
+					apples.add(apple)
+					game.physics.arcade.collide(apple, donsky);
+					game.physics.arcade.overlap(apple, donsky, collisionGoodHandler, null, this);
+				} else if (time % Math.round(150) == 0) {
+					bad_apple = game.add.sprite(x_value, -100, 'bad_apple');
+				    bad_apple.scale.setTo(.1, .1);
+				    game.physics.enable(bad_apple, Phaser.Physics.ARCADE)
+				    bad_apple.enableBody = true;
+	    			bad_apple.physicsBodyType = Phaser.Physics.ARCADE;
+					bad_apple.body.checkCollision.down = true
+					bad_apple.body.velocity.y = -4
+					bad_apples.add(bad_apple)
+					game.physics.arcade.collide(bad_apple, donsky);
+					game.physics.arcade.overlap(bad_apple, donsky, collisionGoodHandler, null, this);
+				}
+				game.physics.arcade.overlap(apples, donsky, collisionGoodHandler, null, this);
+				game.physics.arcade.overlap(bad_apples, donsky, collisionBadHandler, null, this);
 			}
-			game.physics.arcade.overlap(apples, donsky, collisionGoodHandler, null, this);
-			game.physics.arcade.overlap(bad_apples, donsky, collisionBadHandler, null, this);
-
 			if (!game_over) {
 				time++;
+			} else {
+				console.log("hey")
 			}
 			if (time % 200) {
 				level += 3
@@ -211,18 +214,18 @@ window.onload = function() {
 				// }
 		}
 		function collisionGoodHandler(obj, donsky) {
-			if(obj.height < game.world.height + 30) {
-				donsky.kill()
-				score++;
+			if(!game_over){
+				if(obj.height < game.world.height + 30) {
+					donsky.kill()
+					score++;
+				}
 			}
 		}
 		function collisionBadHandler(obj, donsky) {
 			game_over = true;
 			if(obj.height < game.world.height + 30) {
 				donsky.kill()
-				score++;
 			}
-			console.log("DEAD")
 		}		
 
     };
