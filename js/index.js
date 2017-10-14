@@ -131,7 +131,6 @@ window.onload = function() {
 
 			button = game.add.button(game.world.centerX - 60, game.height / 2 + 150, 'start', actionOnClick, this, 2, 1, 0);
 			button.scale.setTo(.1, .1);
-    		text.anchor.setTo(0.5, 0.5);
     		needs_setup = true;
 
 
@@ -149,7 +148,6 @@ window.onload = function() {
 		}
 
 		function actionOnClick() {
-			console.log("heyyyy")
 			paused = false;
 			button.kill();
 			game_over = false;
@@ -176,7 +174,7 @@ window.onload = function() {
 			if(!paused) {
 				x_value = game.world.centerX + Math.random() * (350 + 350) - 350;
 				if(!game_over) {
-					if(time % Math.round(100 ) == 0) {
+					if(time % Math.round(100) == 0) {
 					    apple = game.add.sprite(x_value, -100, 'apple');
 					    apple.scale.setTo(.1, .1);
 					    game.physics.enable(apple, Phaser.Physics.ARCADE)
@@ -198,16 +196,22 @@ window.onload = function() {
 						game.physics.arcade.collide(apple, donsky);
 						game.physics.arcade.overlap(apple, donsky, collisionGoodHandler, null, this);
 					} else if (time % Math.round(150) == 0) {
-						bad_apple = game.add.sprite(x_value, -100, 'bad_apple');
-					    bad_apple.scale.setTo(.1, .1);
-					    game.physics.enable(bad_apple, Phaser.Physics.ARCADE)
-					    bad_apple.enableBody = true;
-		    			bad_apple.physicsBodyType = Phaser.Physics.ARCADE;
-						bad_apple.body.checkCollision.down = true
-						bad_apple.body.velocity.y = -4
-						bad_apples.add(bad_apple)
-						game.physics.arcade.collide(bad_apple, donsky);
-						game.physics.arcade.overlap(bad_apple, donsky, collisionGoodHandler, null, this);
+						// As the level increases throw more bad apples
+						for(i = 0; i < level; i++) {
+							x_value = game.world.centerX + Math.random() * (350 + 350) - 350;
+							y_value = Math.floor(Math.random() * -400 * level) - 100 
+							bad_apple = game.add.sprite(x_value, y_value, 'bad_apple');
+						    bad_apple.scale.setTo(.1, .1);
+						    game.physics.enable(bad_apple, Phaser.Physics.ARCADE)
+						    bad_apple.enableBody = true;
+			    			bad_apple.physicsBodyType = Phaser.Physics.ARCADE;
+							bad_apple.body.checkCollision.down = true
+							// As the level increases bad apples have the chance to fall faster
+							bad_apple.body.velocity.y = -1 * Math.floor(Math.random() * level) - 2 
+							game.physics.arcade.collide(bad_apple, donsky);
+							game.physics.arcade.overlap(bad_apple, donsky, collisionBadHandler, null, this);
+							bad_apples.add(bad_apple)
+						}
 					}
 					game.physics.arcade.overlap(apples, donsky, collisionGoodHandler, null, this);
 					game.physics.arcade.overlap(bad_apples, donsky, collisionBadHandler, null, this);
@@ -215,8 +219,8 @@ window.onload = function() {
 				if (!game_over) {
 					time++;
 				}
-				if (time % 200) {
-					level += 3
+				if(time % 300 == 0) {
+					level++;
 				}
 
 				 if (game.input.keyboard.isDown(Phaser.Keyboard.LEFT)) {
