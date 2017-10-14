@@ -67,7 +67,22 @@ window.onload = function() {
 			game.load.image('peach', 'assets/peach.gif')
 			game.load.image('bad_apple', 'assets/bad_apple.png')
 			game.load.image('start','assets/start.png');
+			game.load.image('banner', 'assets/banner.png')
+			//  The Google WebFont Loader will look for this object, so create it before loading the script.
+			WebFontConfig = {
 
+			    //  'active' means all requested fonts have finished loading
+			    //  We set a 1 second delay before calling 'createText'.
+			    //  For some reason if we don't the browser cannot render the text the first time it's created.
+			    active: function() { game.time.events.add(Phaser.Timer.SECOND, startText, this); },
+
+			    //  The Google Fonts we want to load (specify as many as you like in the array)
+			    google: {
+			      families: ['Gloria Hallelujah']
+			    }
+
+			};
+    		game.load.script('webfont', '//ajax.googleapis.com/ajax/libs/webfont/1.4.7/webfont.js');
 
 		}
 
@@ -112,9 +127,11 @@ window.onload = function() {
 			bad_apples = game.add.group();
 			score = 0;
 			paused = true;
+			banner = game.add.sprite(-55, 50, 'banner')
+			banner.scale.setTo(.6, .6)
 
-			button = game.add.button(game.world.centerX - 140, game.height / 2 + 100, 'start', actionOnClick, this, 2, 1, 0);
-			button.scale.setTo(.25, .25);
+			button = game.add.button(game.world.centerX - 60, game.height / 2 + 150, 'start', actionOnClick, this, 2, 1, 0);
+			button.scale.setTo(.1, .1);
 			text = game.add.text(game.world.centerX + 20, game.world.height / 2 - 200, 'Game over.', { font: "25px Arial", align: "center" });
     		text.anchor.setTo(0.5, 0.5);
     		text2 = game.add.text(game.world.centerX + 20, game.world.height / 2 - 150 , 'Press start to play again.', { font: "25px Arial", align: "center" });
@@ -122,12 +139,16 @@ window.onload = function() {
     		text.visible = false
     		text2.visible = false
     		needs_setup = true;
-    		setup_text = game.add.text(game.world.centerX - 300, game.world.height / 2 - 75 , 'Before you press start, please follow the instructions below: \n \t 1) Look at the "Move Left" button while clicking it \n \t 2) Look at the "Move Right" button while clicking it \n \t 3) Repeat steps 1 and 2 a few times \n \t 4) Press start to begin', { font: "25px Arial", fill: "#ffff99", align: "left" });
 
 
 
 
 
+		}
+
+		function startText() {
+			setup_text = game.add.text(game.world.centerX - 275, game.world.height / 2 - 30 , 'Before you press start, please follow the instructions below: \n \t 1) Look at the "Move Left" button while clicking it \n \t 2) Look at the "Move Right" button while clicking it \n \t 3) Repeat steps 1 and 2 a few times \n \t 4) Press start to begin', { font: "20px Gloria Hallelujah", fill: "#ffff99", align: "left" });
+    		setup_text.font = "Gloria Hallelujah"
 		}
 
 		function actionOnClick() {
@@ -141,6 +162,7 @@ window.onload = function() {
 			text.kill()
 			text2.kill()
 			setup_text.kill()
+			banner.kill()
 
 
 		}
@@ -237,6 +259,7 @@ window.onload = function() {
 			game_over = true;
 			if(obj.height < game.world.height + 30) {
 				donsky.kill()
+				banner.revive()
 			}
 		}		
 
