@@ -115,6 +115,7 @@ this.game.scale.pageAlignHorizontally = true;this.game.scale.pageAlignVertically
 			donsky.scale.setTo(0.2, 0.2);
 			game.physics.enable(donsky, Phaser.Physics.ARCADE);
 			donsky.body.allowGravity = false
+			donsky.body.collideWorldBounds = true;
 			game_over = false;
 
 		}
@@ -132,25 +133,25 @@ this.game.scale.pageAlignHorizontally = true;this.game.scale.pageAlignVertically
 
 		function update() {
 			x_value = game.world.centerX + Math.random() * (350 + 350) - 350;
-			if(time % Math.round(150000 / level) == 0) {
+			if(time % Math.round(150) == 0) {
 			    jarad = game.add.sprite(x_value, -100, 'jarad');
 			    jarad.scale.setTo(0.1, 0.1);
 			    jarad.enableBody = true;
     			jarad.physicsBodyType = Phaser.Physics.ARCADE;
 			}
-			if(time % Math.round(400000 / level) == 0) {
+			if(time % Math.round(400) == 0) {
 			    jack = game.add.sprite(x_value, -100, 'jack');
 			    jack.scale.setTo(0.1, 0.1);
 			    jack.enableBody = true;
     			jack.physicsBodyType = Phaser.Physics.ARCADE;
 			}
-			if(time % Math.round(600000 / level) == 0) {
+			if(time % Math.round(600 ) == 0) {
 			    ben = game.add.sprite(x_value, -100, 'ben');
 			    ben.scale.setTo(0.1, 0.1);
 			    ben.enableBody = true;
     			ben.physicsBodyType = Phaser.Physics.ARCADE;
 			}
-			if(time % Math.round(1200000 / level) == 0) {
+			if(time % Math.round(12000 ) == 0) {
 			    nouri = game.add.sprite(x_value, -100, 'nouri');
 			    nouri.scale.setTo(0.1, 0.1);
 			    nouri.enableBody = true;
