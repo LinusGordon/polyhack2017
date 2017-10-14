@@ -10,8 +10,8 @@ window.onload = function() {
 
     var width = 320;
     var height = 240;
-    var topDist = '0px';
-    var leftDist = '0px';
+    var topDist = '300px';
+    var leftDist = '650px';
     
     var setup = function() {
         var video = document.getElementById('webgazerVideoFeed');
@@ -45,8 +45,21 @@ window.onload = function() {
             if (cl.getCurrentPosition()) {
                 cl.draw(overlay);
             }
+            document.getElementById("testButton").onclick = function(event) { 
+            	var prediction = webgazer.getCurrentPrediction();
+				if (prediction) {
+				    var x = prediction.x;
+				    var y = prediction.y;
+				    console.log("X is " + x)
+				    console.log("Y is " + y)
+				}
+
+
+            }
+
         }
         drawLoop();
+
     };
 
     function checkIfReady() {
