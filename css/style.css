@@ -60,4 +60,5 @@ button:hover {
 #phaser_example {
 	margin-top: 0px;
 	margin-bottom: 30px;
+	position: fixed;
 }
