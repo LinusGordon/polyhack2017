@@ -1,2 +1,2 @@
-# polyhack2017
-Facial recognition webapp although I'm not sure what for yet
+# Apple of My Eye
+An arcade-style minigame controlled by a player's eye movement.
