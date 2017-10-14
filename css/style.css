@@ -56,3 +56,8 @@ button:hover {
   background-image: linear-gradient(to bottom, #3cb0fd, #3498db);
   text-decoration: none;
 }
+
+#phaser_example {
+	margin-top: 0px;
+	margin-bottom: 30px;
+}
