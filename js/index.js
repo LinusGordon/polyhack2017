@@ -126,6 +126,7 @@ window.onload = function() {
 			game.physics.arcade.enable(this);
 			apples = game.add.group();
 			bad_apples = game.add.group();
+			flash_apples = game.add.group();
 			score = 0;
 			paused = true;
 			banner = game.add.sprite(-55, 50, 'banner')
@@ -196,6 +197,25 @@ window.onload = function() {
 
 		function update() {
 			if(!paused) {
+
+				if(time % 10 < 3) {
+					flash_apples.forEach(function (c) { c.tint = 0x0000ff;; });
+				} else if(time % 10 < 6) {
+					flash_apples.forEach(function (c) { c.tint = 0xffdf00;; });
+
+				} else {
+					flash_apples.forEach(function (c) { c.tint = 0xc0c0c0;; });
+				}
+				for(i = 0; i < flash_apples; i++) {
+					if(time % 10 < 3) {
+						flash_apples[i].tint = 0x0000ff;
+					} else if (time % 10 < 6) {
+						flash_apples[i].tint = 0xffdf00;
+					} else {
+						flash_apples[i].tint = 0xc0c0c0;
+					}
+
+				}
 				x_value = game.world.centerX + Math.random() * (350 + 350) - 350;
 				if(!game_over) {
 					if(time % Math.round(100) == 0) {
@@ -236,9 +256,21 @@ window.onload = function() {
 							game.physics.arcade.overlap(bad_apple, donsky, collisionBadHandler, null, this);
 							bad_apples.add(bad_apple)
 						}
-					}
+					} else if (time % Math.round(350) == 0) {
+						apple = game.add.sprite(x_value, -100, 'apple');
+					    apple.scale.setTo(.1, .1);
+					    game.physics.enable(apple, Phaser.Physics.ARCADE)
+					    apple.enableBody = true;
+		    			apple.physicsBodyType = Phaser.Physics.ARCADE;
+						apple.body.checkCollision.down = true
+						apple.body.velocity.y = -5
+						flash_apples.add(apple)
+						game.physics.arcade.collide(apple, donsky);
+						game.physics.arcade.overlap(apple, donsky, collisionGreatHandler, null, this);
+					} 
 					game.physics.arcade.overlap(apples, donsky, collisionGoodHandler, null, this);
 					game.physics.arcade.overlap(bad_apples, donsky, collisionBadHandler, null, this);
+					game.physics.arcade.overlap(flash_apples, donsky, collisionGreatHandler, null, this)
 				}
 				if (!game_over) {
 					time++;
@@ -277,6 +309,19 @@ window.onload = function() {
 				if(obj.height < game.world.height + 30) {
 					donsky.kill()
 					score++;
+					myText = game.add.text(game.world.centerX - 100, 50, "Nice grab! +1 Point!", { font: "30px Gloria Hallelujah", fill: "red", align: "center" });
+					game.time.events.add(100, function() {    game.add.tween(myText).to({y: 0}, 1500, Phaser.Easing.Linear.None, true);    game.add.tween(myText).to({alpha: 0}, 1500, Phaser.Easing.Linear.None, true);}, this);
+				}
+			}
+		}
+		function collisionGreatHandler(obj, donsky) {
+			if(!game_over){
+				if(obj.height < game.world.height + 30) {
+					donsky.kill()
+					score += 5;
+					console.log("great")
+					myText = game.add.text(game.world.centerX - 175, game.world.height / 2, "Bonus Apple! +5 Points!", { font: "30px Gloria Hallelujah", fill: "red", align: "center" });
+					game.time.events.add(500, function() {    game.add.tween(myText).to({y: 0}, 1500, Phaser.Easing.Linear.None, true);    game.add.tween(myText).to({alpha: 0}, 1500, Phaser.Easing.Linear.None, true);}, this);
 				}
 			}
 		}
