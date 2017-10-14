@@ -148,6 +148,7 @@ window.onload = function() {
 		}
 
 		function actionOnClick() {
+			console.log("heyyyy")
 			paused = false;
 			button.kill();
 			game_over = false;
