@@ -68,6 +68,7 @@ window.onload = function() {
 			game.load.image('bad_apple', 'assets/bad_apple.png')
 			game.load.image('start','assets/start.png');
 			game.load.image('banner', 'assets/Banner.png')
+			game.load.image('start_arrow_keys', 'assets/start_arrow_keys.png')
 			//  The Google WebFont Loader will look for this object, so create it before loading the script.
 			WebFontConfig = {
 
@@ -99,6 +100,7 @@ window.onload = function() {
 		var bad_apple;
 		var text;
 		var needs_setup;
+		var arrow_keys;
 
 		function create() {
 			this.game.scale.pageAlignHorizontally = true;
@@ -129,8 +131,10 @@ window.onload = function() {
 			banner = game.add.sprite(-55, 50, 'banner')
 			banner.scale.setTo(.6, .6)
 
-			button = game.add.button(game.world.centerX - 60, game.height / 2 + 150, 'start', actionOnClick, this, 2, 1, 0);
-			button.scale.setTo(.1, .1);
+			button = game.add.button(0, game.height / 2 + 160, 'start', actionOnClick, this, 2, 1, 0);
+			button.scale.setTo(.3, .3);
+			button2 = game.add.button(game.world.centerX, game.height / 2 + 160, 'start_arrow_keys', actionOnClickArrowKeys, this, 2, 1, 0);
+			button2.scale.setTo(.3, .3);
     		needs_setup = true;
 
 
@@ -148,9 +152,9 @@ window.onload = function() {
 		}
 
 		function actionOnClick() {
-			console.log("heyyyy")
 			paused = false;
 			button.kill();
+			button2.kill();
 			game_over = false;
 			score = 0;
 			level = 1;
@@ -158,15 +162,34 @@ window.onload = function() {
 			text.kill()
 			setup_text.kill()
 			banner.kill()
+			arrow_keys = false;
 
 
 		}
+		function actionOnClickArrowKeys() {
+			paused = false;
+			button.kill();
+			button2.kill();
+			game_over = false;
+			score = 0;
+			level = 1;
+			time = 0;
+			text.kill()
+			setup_text.kill()
+			banner.kill()
+			arrow_keys = true
+
+
+
+		}
+
 
 		function render() {
 			game.debug.text('Your score: ' + score, 10, 20);
 			if(game_over == true) {
 				text.visible = true
 				button.revive()
+				button2.revive()
 		    } 
 
 		}
@@ -224,25 +247,28 @@ window.onload = function() {
 					level++;
 				}
 
-				 // if (game.input.keyboard.isDown(Phaser.Keyboard.LEFT)) {
-				 // 	donsky.body.velocity.x = -300;
-				 // }
-				 // else if (game.input.keyboard.isDown(Phaser.Keyboard.RIGHT)) {
-				 // 	donsky.body.velocity.x = 300;
-				 // } else {
-				 // 	donsky.body.velocity.x = 0;
-				 // }
+				if(arrow_keys) {
+					 if (game.input.keyboard.isDown(Phaser.Keyboard.LEFT)) {
+					 	donsky.body.velocity.x = -300;
+					 }
+					 else if (game.input.keyboard.isDown(Phaser.Keyboard.RIGHT)) {
+					 	donsky.body.velocity.x = 300;
+					 } else {
+					 	donsky.body.velocity.x = 0;
+					 }
+				} else {
 				 var prediction = webgazer.getCurrentPrediction();
-				 if (prediction) {
-					    var x = prediction.x;
-					    var y = prediction.y;
-					    if(x < 400) {
-					    	donsky.body.velocity.x = -300
-					    } else if (x > 800) {
-					    	donsky.body.velocity.x = 300
-					    } else {
-					    	donsky.body.velocity.x = 0
-					    }
+					 if (prediction) {
+						    var x = prediction.x;
+						    var y = prediction.y;
+						    if(x < 400) {
+						    	donsky.body.velocity.x = -300
+						    } else if (x > 800) {
+						    	donsky.body.velocity.x = 300
+						    } else {
+						    	donsky.body.velocity.x = 0
+						    }
+						}
 					}
 				}
 		}
