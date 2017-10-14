@@ -134,7 +134,7 @@ window.onload = function() {
 
 			button = game.add.button(0, game.height / 2 + 160, 'start', actionOnClick, this, 2, 1, 0);
 			button.scale.setTo(.3, .3);
-			button2 = game.add.button(game.world.centerX, game.height / 2 + 160, 'start_arrow_keys', actionOnClickArrowKeys, this, 2, 1, 0);
+			button2 = game.add.button(game.world.centerX + 30, game.height / 2 + 160, 'start_arrow_keys', actionOnClickArrowKeys, this, 2, 1, 0);
 			button2.scale.setTo(.3, .3);
     		needs_setup = true;
 
@@ -263,7 +263,7 @@ window.onload = function() {
 					    apple.enableBody = true;
 		    			apple.physicsBodyType = Phaser.Physics.ARCADE;
 						apple.body.checkCollision.down = true
-						apple.body.velocity.y = -5
+						apple.body.velocity.y = -7
 						flash_apples.add(apple)
 						game.physics.arcade.collide(apple, donsky);
 						game.physics.arcade.overlap(apple, donsky, collisionGreatHandler, null, this);
