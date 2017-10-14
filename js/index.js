@@ -67,7 +67,7 @@ window.onload = function() {
 			game.load.image('peach', 'assets/peach.gif')
 			game.load.image('bad_apple', 'assets/bad_apple.png')
 			game.load.image('start','assets/start.png');
-			game.load.image('banner', 'assets/banner.png')
+			game.load.image('banner', 'assets/Banner.png')
 			//  The Google WebFont Loader will look for this object, so create it before loading the script.
 			WebFontConfig = {
 
