@@ -86,6 +86,7 @@ window.onload = function() {
 			game.load.image('ben', 'assets/ben.png');
 			game.load.image('donsky', 'assets/donsky.png')
 			game.load.image('ground', 'assets/square.png')
+			game.load.image('donsky', 'assets/donsky.png')
 		}
 
 		var jarad;
@@ -102,6 +103,8 @@ window.onload = function() {
 
 		    //  Set the world (global) gravity
 		    game.physics.arcade.gravity.y = 100;
+
+		    background = game.add.tileSprite(0,0,800,600,'background')
 
 		    //  Sprite 1 will use the World (global) gravity
 		    // jarad = game.add.sprite(10, 10, 'jarad');
